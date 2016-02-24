@@ -2,9 +2,9 @@
 
 ## Objectives
 
-  1. Understand what ActiveModel::Serializer does.
+  1. Explain what ActiveModel::Serializer does.
   2. Use ActiveModel::Serializer to render JSON with associated objects
-  3. Understand how ActiveModel::Serializer fits into Rails 5.
+  3. Explain how ActiveModel::Serializer fits into Rails 5.
 
 ## Lesson
 
@@ -32,7 +32,7 @@ had `users` and pretty soon we're getting real deep in the weeds trying
 to keep track of all the `include`s and `only`s in a single line of
 `to_json`.
 
-Or imagine imagine using `to_json` to render
+Or imagine using `to_json` to render
 something like this venue response from the Foursquare API:
 
 ```javascript
@@ -118,8 +118,8 @@ something and introduce bugs.
 
 ![joey milk](http://i.giphy.com/3o6gaVLjbCBjJcKfjW.gif)
 
-Okay. So far, just like in an infomercial, any time we've said "there's
-got to be a better way!", we've found one.
+Okay. So far, just like in an infomercial, any time we've said, "There's
+got to be a better way!" we've found one.
 
 ![better way](http://i.giphy.com/xT0BKmy9rfrISFCiHK.gif)
 
@@ -172,7 +172,7 @@ valid arguments either way (as there so often is in programming).
 In Rails 5, however, the goal was to allow developers to create lean,
 efficient, API-only Rails applications. M and C without the V. With the
 popularity of mobile apps and robust front-end frameworks like Ember.js
-and Angula.js, there was a need to strip Rails down to just what is
+and Angular.js, there was a need to strip Rails down to just what is
 needed to serve as an API, and ActiveModel::Serializer, not being tied
 to the View layer, is how the Rails team chose to move forward.
 
@@ -368,7 +368,7 @@ Now if we reload our first post show page, we can click through our
 ### Rendering With Explicit Serializers
 
 What if next we were building our our Author show page and wanted to
-render a list of their posts along with it?
+render a list of an author's posts along with the author's information?
 
 Should be as simple as adding a `has_many :posts` to the
 `AuthorSerializer`, right? Let's give it a shot:
