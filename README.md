@@ -9,7 +9,7 @@
 ## Lesson
 
 In the last iteration of our blog application, we saw that using
-`to_json` was an easy way to serialize objects to JSON without havin to
+`to_json` was an easy way to serialize objects to JSON without having to
 create our own serializer. However, if we look at our current controller
 code:
 
@@ -436,3 +436,5 @@ specific tasks.
 Now let's all celebrate with a nice drink of milk!
 
 ![joey milk](http://i.giphy.com/TsMnvSsfKzThu.gif)
+
+<p data-visibility='hidden'>View <a href='https://learn.co/lessons/using-active-model-serializer'>Using Active Model Serializer</a> on Learn.co and start learning to code for free.</p>
