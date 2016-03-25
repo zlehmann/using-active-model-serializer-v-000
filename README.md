@@ -367,7 +367,7 @@ Now if we reload our first post show page, we can click through our
 
 ### Rendering With Explicit Serializers
 
-What if next we were building our our Author show page and wanted to
+What if next we were building out our Author show page and wanted to
 render a list of an author's posts along with the author's information?
 
 Should be as simple as adding a `has_many :posts` to the
