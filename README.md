@@ -373,6 +373,13 @@ render a list of an author's posts along with the author's information?
 Should be as simple as adding a `has_many :posts` to the
 `AuthorSerializer`, right? Let's give it a shot:
 
+```ruby
+class AuthorSerializer < ActiveModel::Serializer
+  attributes :id, :name
+  has_many :posts
+end
+```
+
 Oops. Stack level too deep. What happened here? Well, if we look at our
 serializers, we're including the `author` in the `post`, and we're
 including the `posts` in the `author`, which all include the `author`,
@@ -438,3 +445,5 @@ Now let's all celebrate with a nice drink of milk!
 ![joey milk](http://i.giphy.com/TsMnvSsfKzThu.gif)
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/using-active-model-serializer'>Using Active Model Serializer</a> on Learn.co and start learning to code for free.</p>
+
+<p class='util--hide'>View <a href='https://learn.co/lessons/using-active-model-serializer'>Using Active Model Serializer</a> on Learn.co and start learning to code for free.</p>
