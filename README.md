@@ -296,7 +296,7 @@ this:
 }
 ```
 
-But how to we add the author name to our post JSON?
+But how do we add the author name to our post JSON?
 
 Again, we lean on those Rails conventions. If we add a `has_one :author`
 to our `PostSerializer`:
@@ -315,9 +315,9 @@ concerned with the number of the relationship, not the direction. So it
 only knows `has_one` and `has_many`. This is because it's not describing
 a data/model relationship, but the relationship as defined by the JSON.
 
-Reload `/posts/id.json` we will now see our author information.
+Reload `/posts/id.json`, and we will now see our author information.
 
-If we load `/posts/1` and try next, it doesn't work! What happened? Look again at the JSON from `/posts/1.json`:
+If we load `/posts/1` and try to click `Next...`, it doesn't work! What happened? Look again at the JSON from `/posts/1.json`:
 
 ```javascript
 {
