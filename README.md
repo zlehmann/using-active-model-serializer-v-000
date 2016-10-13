@@ -233,16 +233,14 @@ stuff in our controller:
 
 Remember that we said calling `render json: @post` would implicitly use
 the new ActiveModel::Serializer to render the post to JSON? Let's see it
-in action. Restart your Rails server and browse to `/posts/id.json` and
+in action. Restart your Rails server and browse to `/posts/1.json` and
 look at the results. It should look like this:
 
 ```javascript
 {
-  post: {
-    id: 1,
-    title: "A Blog Post By Stephen King",
-    description: "This is a blog post by Stephen King. It will probably be a movie soon."
-  }
+  id: 1,
+  title: "A Blog Post By Stephen King",
+  description: "This is a blog post by Stephen King. It will probably be a movie soon."
 }
 ```
 
@@ -284,15 +282,13 @@ class AuthorsController < ApplicationController
 end
 ```
 
-And load up `/authors/id.json`. We should see something that looks like
+And load up `/authors/1.json`. We should see something that looks like
 this:
 
 ```javascript
 {
-  author: {
-    id: 1,
-    name: "Stephen King"
-  }
+  id: 1,
+  name: "Stephen King"
 }
 ```
 
@@ -304,74 +300,32 @@ to our `PostSerializer`:
 ```ruby
 class PostSerializer < ActiveModel::Serializer
   attributes :id, :title, :description
-  has_one :author
+  belongs_to :author
 end
 ```
 
-**Top-tip:** You might notice that we're using `has_one` in our
-serializer, when in the model, the post -> author relationship is
-actually a `belongs_to`. This can be confusing at first, but AMS is only
-concerned with the number of the relationship, not the direction. So it
-only knows `has_one` and `has_many`. This is because it's not describing
-a data/model relationship, but the relationship as defined by the JSON.
-
-Reload `/posts/id.json`, and we will now see our author information.
-
-If we load `/posts/1` and try to click `Next...`, it doesn't work! What happened? Look again at the JSON from `/posts/1.json`:
+Reload `/posts/1.json`, and we will now see our author information.
 
 ```javascript
 {
-  post: {
+  id: 1,
+  title: "A Blog Post By Stephen King",
+  description: "This is a blog post by Stephen King. It will probably be a movie soon.",
+  author: {
     id: 1,
-    title: "A Blog Post By Stephen King",
-    description: "This is a blog post by Stephen King. It will probably be a movie soon.",
-    author: {
-      id: 1,
-      name: "Stephen King"
-    }
+    name: "Stephen King"
   }
 }
 ```
 
-What's changed?
+And now if we reload our first post show page and click through our
+`Next` button we can see that everything works exactly the same as before!
 
-We now have a `root` node of `post: {` in our JSON, instead of just the
-values. This is the default because it more accurately describes the
-JSON response. All we have to do to fix our `show` page is to add
-checking the `["post"]` node to our Javascript:
-
-```erb
-# posts/show.html.erb
-# ...
-<script type="text/javascript" charset="utf-8">
-$(function () {
-  $(".js-next").on("click", function() {
-    var nextId = parseInt($(".js-next").attr("data-id")) + 1;
-    $.get("/posts/" + nextId + ".json", function(data) {
-      // get post
-      var post = data["post"];
-      $(".authorName").text(post["author"]["name"]);
-      $(".postTitle").text(post["title"]);
-      $(".postBody").text(post["description"]);
-      // re-set the id to current on the link
-      $(".js-next").attr("data-id", post["id"]);
-    });
-  });
-});
-</script>
-```
-
-Now if we reload our first post show page, we can click through our
-`Next` button and everything works again!
-
-
-### Rendering With Explicit Serializers
-
-What if next we were building out our Author show page and wanted to
+Now what if next we were building out our Author show page and wanted to
 render a list of an author's posts along with the author's information?
 
-Should be as simple as adding a `has_many :posts` to the
-`AuthorSerializer`, right? Let's give it a shot:
+Well, it's as simple as adding a `has_many :posts` to the
+`AuthorSerializer`!
 
 ```ruby
 class AuthorSerializer < ActiveModel::Serializer
@@ -380,19 +334,13 @@ class AuthorSerializer < ActiveModel::Serializer
 end
 ```
 
-Oops. Stack level too deep. What happened here? Well, if we look at our
-serializers, we're including the `author` in the `post`, and we're
-including the `posts` in the `author`, which all include the `author`,
-which includes the `posts`, which each include the `author`... Welp. We
-broke the universe.
+**Oh the power!!!**
 
 ![interstellar](http://i.giphy.com/pZGDZwmxOtEEo.gif)
 
-The reason we hit this infinite loop is that we're not doing the work to
-make sure our API is only returning the data it needs to.
+### Rendering With Explicit Serializers
 
-Since our post JSON really just needs an author's name, and maybe `id`,
-we might want to do a simpler serialization of the author for those
+Let's suppose that when we display a Posts Author, we don't need all the information being rendered from the AuthorSerializer. Since our post JSON really just needs an author's name, we might want to do a simpler serialization of the author for those
 purposes.
 
 Let's make a new `PostAuthorSerializer`:
@@ -404,7 +352,7 @@ embedded in a post:
 
 ```ruby
 class PostAuthorSerializer < ActiveModel::Serializer
-  attributes :id, :name
+  attributes :name
 end
 ```
 
@@ -415,7 +363,7 @@ relying on the convention:
 ```ruby
 class PostSerializer < ActiveModel::Serializer
   attributes :id, :title, :description
-  has_one :author, serializer: PostAuthorSerializer
+  belongs_to :author, serializer: PostAuthorSerializer
 end
 ```
 
@@ -445,5 +393,3 @@ Now let's all celebrate with a nice drink of milk!
 ![joey milk](http://i.giphy.com/TsMnvSsfKzThu.gif)
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/using-active-model-serializer'>Using Active Model Serializer</a> on Learn.co and start learning to code for free.</p>
-
-<p class='util--hide'>View <a href='https://learn.co/lessons/using-active-model-serializer'>Using Active Model Serializer</a> on Learn.co and start learning to code for free.</p>
