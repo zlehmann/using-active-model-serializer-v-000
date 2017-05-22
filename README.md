@@ -294,7 +294,7 @@ this:
 
 But how do we add the author name to our post JSON?
 
-Again, we lean on those Rails conventions. If we add a `has_one :author`
+Again, we lean on those Rails conventions. If we add a `belongs_to :author`
 to our `PostSerializer`:
 
 ```ruby
@@ -393,3 +393,5 @@ Now let's all celebrate with a nice drink of milk!
 ![joey milk](http://i.giphy.com/TsMnvSsfKzThu.gif)
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/using-active-model-serializer'>Using Active Model Serializer</a> on Learn.co and start learning to code for free.</p>
+
+<p class='util--hide'>View <a href='https://learn.co/lessons/using-active-model-serializer'>Using Active Model Serializer</a> on Learn.co and start learning to code for free.</p>
