@@ -15,11 +15,9 @@ Imagine we had a blog application. When we want to view an instance of a `Post`,
 # ...
   def show
     @post = Post.find(params[:id])
-    respond_to do |format|
-      format.html { render :show }
-      format.json { render json: @post.to_json(only: [:title, :description, :id],
+    render json: @post.to_json(only: [:title, :description, :id],
                               include: [author: { only: [:name]}]) }
-    end
+
   end
 ```
 
@@ -130,45 +128,22 @@ model, then we can also have a `PostSerializer` serializer, and by
 default, Rails will use our serializer if we simply call `render json:
 post` in a controller.
 
-How is that different than when we created our own `PostSerializer` by
-hand and used it in the controller? Firstly, we had to explicitly call
-our `PostSerializer.serialize` method to do the work, whereas the
-convention-based approach of AMS makes it an implicit call.
+How is that different than when we created our own serializer by
+hand and used it in the controller? Remember:
+```
+render json: post.to_json(only: [:title, :description, :id],
+                          include: [author: { only: [:name]}])
+```
+We had to explicitly tell Rails what data to return whereas ActiveModel Serializers will take care of this for us.
 
 But second, and more importantly, AMS doesn't require us to do the
 tedious work of building out JSON strings by hand. We'll see it in
 action shortly.
 
-#### What About JBuilder?
 
-You may have seen [JBuilder](https://github.com/rails/jbuilder) files
-pop up when scaffolding things in your Rails 4 applications.
-
-JBuilder is another serialization tool that was included by default in
-Rails 4. JBuilder takes the approach that the JSON serialization is more
-of a view function than a controller function, and as such, you could
-create something like:
-
-```erb
-# app/views/posts/show.json.jbuilder
-
-json.title @post.title
-json.description @post.description
-json.author do
-  json.name @post.author.name
-end
-```
-
-This is a nice and flexible way to do things, but as you can see, also
-somewhat repetitive just for a few attributes.
-
-You can split hairs as to whether or not rendering JSON is a view-level
-template responsibility or a controller-level responsibility - there's
-valid arguments either way (as there so often is in programming).
-
-In Rails 5, however, the goal was to allow developers to create lean,
+In Rails 5, the goal was to allow developers to create lean,
 efficient, API-only Rails applications. M and C without the V. With the
-popularity of mobile apps and robust front-end frameworks like Ember.js
+popularity of mobile apps and robust front-end frameworks like React.js
 and Angular.js, there was a need to strip Rails down to just what is
 needed to serve as an API, and ActiveModel::Serializer, not being tied
 to the View layer, is how the Rails team chose to move forward.
@@ -178,7 +153,7 @@ to the View layer, is how the Rails team chose to move forward.
 We have our blog application from the previous lesson. Let's refactor it
 to use AMS.
 
-First we need to add the gem, as it's not built-in to Rails 4 yet.
+First we need to add the gem.
 
 ```ruby
 # Gemfile
