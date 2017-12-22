@@ -361,6 +361,8 @@ Now let's all celebrate with a nice drink of milk!
 
 ![joey milk](http://i.giphy.com/TsMnvSsfKzThu.gif)
 
+## Additional Resources
+
 [Getting Started with Active Model Serializer](https://github.com/rails-api/active_model_serializers/blob/0-10-stable/docs/general/getting_started.md)
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/using-active-model-serializer'>Using Active Model Serializer</a> on Learn.co and start learning to code for free.</p>
