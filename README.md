@@ -8,7 +8,7 @@
 
 ## Lesson
 
-Imagine we had a blog application. When we want to view an instance of a `Post`, we also want to view the `Author` associated with that `Post`. We could manually nest the data by using the built in ActiveRecord method `to_json` to manually serialize this data in a way that makes sense. Take a look at the current implementation of that:
+Imagine we had a blog application. When we want to view an instance of a `Post`, we also want to view the `Author` associated with that `Post`. We could manually nest the data by using the built in ActiveRecord method `to_json` to serialize this data in a way that makes sense. Take a look at the current implementation of that:
 
 ```ruby
 # posts_controller.rb
@@ -16,7 +16,7 @@ Imagine we had a blog application. When we want to view an instance of a `Post`,
   def show
     @post = Post.find(params[:id])
     render json: @post.to_json(only: [:title, :description, :id],
-                              include: [author: { only: [:name]}]) }
+                              include: [author: { only: [:name]}])
 
   end
 ```
@@ -131,7 +131,7 @@ post` in a controller.
 How is that different than when we created our own serializer by
 hand and used it in the controller? Remember:
 ```
-render json: post.to_json(only: [:title, :description, :id],
+render json: @post.to_json(only: [:title, :description, :id],
                           include: [author: { only: [:name]}])
 ```
 We had to explicitly tell Rails what data to return whereas ActiveModel Serializers will take care of this for us.
@@ -196,16 +196,14 @@ stuff in our controller:
 # posts_controller.rb
  def show
     @post = Post.find(params[:id])
-    respond_to do |format|
-      format.html { render :show }
-      format.json { render json: @post}
-    end
+    render json: @post.to_json(only: [:title, :description, :id],
+                              include: [author: { only: [:name]}])
   end
 ```
 
 Remember that we said calling `render json: @post` would implicitly use
 the new ActiveModel::Serializer to render the post to JSON? Let's see it
-in action. Restart your Rails server and browse to `/posts/1.json` and
+in action. Restart your Rails server and browse to `/posts/1` and
 look at the results. It should look like this:
 
 ```javascript
@@ -218,6 +216,8 @@ look at the results. It should look like this:
 
 Worked like a charm! Nothing we didn't want, and our controller is back
 to a clear, non-messy state.
+
+Before moving on, test out this serializer. Navigate to `localhost:3000/posts/1` and see what happens when you change the attributes for your serializer. What data do you see if the only attribute is `:id`?
 
 ### Rendering An Author
 
@@ -246,15 +246,12 @@ to handle a JSON request:
 class AuthorsController < ApplicationController
   def show
     @author = Author.find(params[:id])
-    respond_to do |f|
-      f.html { render :show }
-      f.json { render json: @author }
-    end
+    render json: @author, status: 200
   end
 end
 ```
 
-And load up `/authors/1.json`. We should see something that looks like
+And load up `/authors/1`. We should see something that looks like
 this:
 
 ```javascript
@@ -276,7 +273,7 @@ class PostSerializer < ActiveModel::Serializer
 end
 ```
 
-Reload `/posts/1.json`, and we will now see our author information.
+Reload `/posts/1`, and we will now see our author information.
 
 ```javascript
 {
@@ -342,8 +339,8 @@ end
 Now we're telling AMS to render `:author` with `PostAuthorSerializer`
 instead of the default.
 
-So if we reload `/authors/1.json` we should see the author with their
-posts, and if we reload `/posts/1.json` we should see our post with just
+So if we reload `/authors/1` we should see the author with their
+posts, and if we reload `/posts/1` we should see our post with just
 the simple author information.
 
 In this way, AMS is a powerful way to compose an API with explicit,
@@ -363,6 +360,8 @@ specific tasks.
 Now let's all celebrate with a nice drink of milk!
 
 ![joey milk](http://i.giphy.com/TsMnvSsfKzThu.gif)
+
+[Getting Started with Active Model Serializer](https://github.com/rails-api/active_model_serializers/blob/0-10-stable/docs/general/getting_started.md)
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/using-active-model-serializer'>Using Active Model Serializer</a> on Learn.co and start learning to code for free.</p>
 
