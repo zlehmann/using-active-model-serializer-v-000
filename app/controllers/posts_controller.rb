@@ -3,13 +3,15 @@ class PostsController < ApplicationController
 
   def index
     @posts = Post.all
-    render json: @posts
   end
 
   def show
     @post = Post.find(params[:id])
-    render json: @post.to_json(only: [:title, :description, :id],
-                              include: [author: { only: [:name]}])
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render json: @post.to_json(only: [:title, :description, :id],
+                              include: [author: { only: [:name]}]) }
+    end
   end
 
   def new

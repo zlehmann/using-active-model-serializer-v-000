@@ -8,10 +8,7 @@
 
 ## Lesson
 
-In the last iteration of our blog application, we saw that using
-`to_json` was an easy way to serialize objects to JSON without having to
-create our own serializer. However, if we look at our current controller
-code:
+Imagine we had a blog application. When we want to view an instance of a `Post`, we also want to view the `Author` associated with that `Post`. We could manually nest the data by using the built in ActiveRecord method `to_json` to manually serialize this data in a way that makes sense. Take a look at the current implementation of that:
 
 ```ruby
 # posts_controller.rb
