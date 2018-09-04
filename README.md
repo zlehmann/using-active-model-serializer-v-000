@@ -2,13 +2,17 @@
 
 ## Objectives
 
-  1. Explain what ActiveModel::Serializer does.
-  2. Use ActiveModel::Serializer to render JSON with associated objects
-  3. Explain how ActiveModel::Serializer fits into Rails 5.
+1.  Explain what ActiveModel::Serializer does.
+2.  Use ActiveModel::Serializer to render JSON with associated objects
+3.  Explain how ActiveModel::Serializer fits into Rails 5.
 
 ## Lesson
 
-Imagine we had a blog application. When we want to view an instance of a `Post`, we also want to view the `Author` associated with that `Post`. We could manually nest the data by using the built in ActiveRecord method `to_json` to serialize this data in a way that makes sense. Take a look at the current implementation of that:
+Imagine we had a blog application. When we want to view an instance of a `Post`,
+we also want to view the `Author` associated with that `Post`. We could manually
+nest the data by using the built in ActiveRecord method `to_json` to serialize
+this data in a way that makes sense. Take a look at the current implementation
+of that:
 
 ```ruby
 # posts_controller.rb
@@ -21,11 +25,10 @@ Imagine we had a blog application. When we want to view an instance of a `Post`,
   end
 ```
 
-It's clear that even a little bit of customizing the output of `to_json`
-can get ugly real quick. Imagine if the post had `comments` and comments
-had `users` and pretty soon we're getting real deep in the weeds trying
-to keep track of all the `include`s and `only`s in a single line of
-`to_json`.
+It's clear that even a little bit of customizing the output of `to_json` can get
+ugly real quick. Imagine if the post had `comments` and comments had `users` and
+pretty soon we're getting real deep in the weeds trying to keep track of all the
+`include`s and `only`s in a single line of `to_json`.
 
 Or imagine using `to_json` to render
 something like this venue response from the Foursquare API:
@@ -123,23 +126,24 @@ got to be a better way!" we've found one.
 ActiveModel::Serializer, or AMS, provides a convention-based approach to
 serializing resources in a Rails-y way.
 
-What does that mean? At a basic level, it means that if we have a `Post`
-model, then we can also have a `PostSerializer` serializer, and by
-default, Rails will use our serializer if we simply call `render json:
-post` in a controller.
+What does that mean? At a basic level, it means that if we have a `Post` model,
+then we can also have a `PostSerializer` serializer, and by default, Rails will
+use our serializer if we simply call `render json: post` in a controller.
 
 How is that different than when we created our own serializer by
 hand and used it in the controller? Remember:
+
 ```
 render json: @post.to_json(only: [:title, :description, :id],
                           include: [author: { only: [:name]}])
 ```
-We had to explicitly tell Rails what data to return whereas ActiveModel Serializers will take care of this for us.
+
+We had to explicitly tell Rails what data to return whereas ActiveModel
+Serializers will take care of this for us.
 
 But second, and more importantly, AMS doesn't require us to do the
 tedious work of building out JSON strings by hand. We'll see it in
 action shortly.
-
 
 In Rails 5, the goal was to allow developers to create lean,
 efficient, API-only Rails applications. M and C without the V. With the
@@ -217,7 +221,9 @@ look at the results. It should look like this:
 Worked like a charm! Nothing we didn't want, and our controller is back
 to a clear, non-messy state.
 
-Before moving on, test out this serializer. Navigate to `localhost:3000/posts/1` and see what happens when you change the attributes for your serializer. What data do you see if the only attribute is `:id`?
+Before moving on, test out this serializer. Navigate to `localhost:3000/posts/1`
+and see what happens when you change the attributes for your serializer. What
+data do you see if the only attribute is `:id`?
 
 ### Rendering An Author
 
@@ -309,8 +315,10 @@ end
 
 ### Rendering With Explicit Serializers
 
-Let's suppose that when we display a Posts Author, we don't need all the information being rendered from the AuthorSerializer. Since our post JSON really just needs an author's name, we might want to do a simpler serialization of the author for those
-purposes.
+Let's suppose that when we display a Posts Author, we don't need all the
+information being rendered from the AuthorSerializer. Since our post JSON really
+just needs an author's name, we might want to do a simpler serialization of the
+author for those purposes.
 
 Let's make a new `PostAuthorSerializer`:
 
@@ -326,7 +334,7 @@ end
 ```
 
 But how do we get the `PostSerializer` to use this instead of the
-default? We have to *explicitly* give it a serializer to use rather than
+default? We have to _explicitly_ give it a serializer to use rather than
 relying on the convention:
 
 ```ruby
