@@ -128,7 +128,7 @@ serializing resources in a Rails-y way.
 
 What does that mean? At a basic level, it means that if we have a `Post` model,
 then we can also have a `PostSerializer` serializer, and by default, Rails will
-use our serializer if we simply call `render json: post` in a controller.
+use our serializer if we simply call `render json: @post` in a controller.
 
 How is that different than when we created our own serializer by
 hand and used it in the controller? Remember:
