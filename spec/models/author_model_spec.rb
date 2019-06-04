@@ -8,3 +8,4 @@ RSpec.describe "author_model" do
   it "lets me pass my Learn tests" do
     expect(test_var).to eq("yes")
   end
+end
